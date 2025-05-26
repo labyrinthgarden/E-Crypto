@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 function Chat() {
-  const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -11,18 +10,14 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    const userMessage = { text: input, sender: "user" };
+  const handleOptionClick = async (option) => {
+    const userMessage = { text: option, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
     setIsLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/chat",
-        { message: input },
+      const res = await axios.post("http://localhost:8000/option/",
+        { message: option },
         {
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +28,7 @@ function Chat() {
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       const errorMessage = {
-        text: "⚠️ Error al conectar con la IA",
+        text: "⚠️ Error al conectar con el servidor",
         sender: "ai",
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -43,9 +38,12 @@ function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 font-sans">
-      {/* Header */}
-      <header className="bg-purple-800 text-white p-4 shadow-lg">
+    <div className="flex flex-col h-screen bg-gray-50 font-sans relative">
+      {/* Fondo de imagen para toda la pantalla */}
+      <div className="absolute inset-0 bg-[url('src/assets/background.png')] bg-cover bg-center z-0"></div>
+
+      {/* Header con transparencia */}
+      <header className="relative z-10 bg-purple-800/50 backdrop-blur-sm text-white p-4 shadow-lg">
         <div className="container mx-auto flex items-center">
           <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,83 +52,82 @@ function Chat() {
           </div>
           <div>
             <h1 className="text-xl font-bold">E-Crypto</h1>
-            <p className="text-xs opacity-80">{isLoading ? "Typing..." : "Online"}</p>
+            <p className="text-xl opacity-80">{isLoading ? "Typing..." : "Online"}</p>
           </div>
         </div>
       </header>
 
-      {/* Área de mensajes */}
-      <div className="flex-1 overflow-y-auto p-4 bg-[url('src/assets/background.png')] bg-cover bg-center from-gray-50 to-gray-10">
-        <div className="container mx-auto max-w-3xl">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-            >
+      {/* Contenedor principal */}
+      <div className="flex-1 flex flex-col overflow-hidden relative z-10">
+        {/* Área de mensajes con transparencia - padding reducido */}
+        <div className="flex-1 overflow-y-auto px-1 py-1">
+          <div className="container mx-auto max-w-8/9">
+            {messages.map((msg, index) => (
               <div
-                className={`max-w-[80%] rounded-2xl p-4 transition-all duration-200 ${
-                  msg.sender === "user"
-                    ? "bg-indigo-600 text-white rounded-br-none shadow-md hover:shadow-lg"
-                    : "bg-gray text-white rounded-bl-none shadow-sm hover:shadow-md border border-gray-200"
-                }`}
+                key={index}
+                className={`flex mb-2 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
-                <p className="text-sm">{msg.text}</p>
-                <div className={`text-xs mt-1 opacity-60 flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  {msg.sender === "user" ? "You" : "AI"}
+                <div
+                  className={`max-w-[95%] rounded-2xl p-3 transition-all duration-200 ${
+                    msg.sender === "user"
+                      ? "bg-purple-700/30 text-white rounded-br-none shadow-md hover:shadow-lg border border-gray-200/50 backdrop-blur-sm"
+                      : "bg-black/40 text-white rounded-bl-none shadow-sm hover:shadow-md border border-gray-200/50 backdrop-blur-sm"
+                  }`}
+                >
+                  <p className="text-xl">{msg.text}</p>
+                  <div className={`text-[0.65rem] mt-1 opacity-60 flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                    {msg.sender === "user" ? "You" : "AI"}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {isLoading && (
-            <div className="flex justify-start mb-4">
-              <div className="opacity-80 border-1 border-white border-b-white text-gray-800 rounded-2xl rounded-bl-none p-4 shadow-sm max-w-[80%]">
-                <div className="flex space-x-2 items-center">
-                  <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse delay-100"></div>
-                  <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse delay-200"></div>
+            {isLoading && (
+              <div className="flex justify-start mb-2">
+                <div className="bg-black/40 text-xl backdrop-blur-sm border border-gray-50 text-gray-800 rounded-2xl rounded-bl-none p-3 shadow-sm max-w-[80%]">
+                  <div className="flex space-x-2 items-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse delay-100"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse delay-200"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-
-      {/* Barra de envío */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-black border-t border-gray-200 p-4 shadow-inner"
-      >
-        <div className="container mx-auto max-w-3xl flex items-center">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe un mensaje..."
-            className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 text-white bg-black"
-          />
-          <div className="ml-3 flex items-center">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200"
-              aria-label="Enviar mensaje"
-            >
-              {isLoading ? (
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
-                </svg>
-              )}
-            </button>
+            )}
+            <div ref={messagesEndRef} />
           </div>
         </div>
-      </form>
+
+        {/* Barra de opciones fija en la parte inferior con transparencia */}
+        <div className="sticky bottom-0 bg-black/15 backdrop-blur-sm p-3">
+          <div className="container mx-auto max-w-[90%] flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => !isLoading && handleOptionClick("Cual es tu mejor prediccion en este momento?")}
+              disabled={isLoading}
+              className="px-4 py-2 text-s bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >Cual es tu mejor prediccion en este momento?</button>
+            <button
+              onClick={() => !isLoading && handleOptionClick("Que me recomiendas segun el comportamiendo de los ultimos 4 meses?")}
+              disabled={isLoading}
+              className="px-4 py-2 text-s bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >Que me recomiendas segun el comportamiendo de los ultimos 4 meses?</button>
+            <button
+              onClick={() => !isLoading && handleOptionClick("Que me recomiendas en un largo plazo?")}
+              disabled={isLoading}
+              className="px-4 py-2 text-s bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >Que me recomiendas en un largo plazo?</button>
+            <button
+              onClick={() => !isLoading && handleOptionClick("Que me recomiendas en un corto plazo?")}
+              disabled={isLoading}
+              className="px-4 py-2 text-s bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >Que me recomiendas en un corto plazo?</button>
+            <button
+              onClick={() => !isLoading && handleOptionClick("Hablame de las cotizaciones en este momento")}
+              disabled={isLoading}
+              className="px-4 py-2 text-s bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >Hablame de las cotizaciones en este momento</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
