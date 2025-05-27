@@ -22,7 +22,7 @@ function HomeScreen() {
       >Continuar al Chat</button>
       <button
         className="px-8 py-4 bg-black/70 text-white rounded-lg text-sm font-semibold shadow hover:bg-purple-700/70 transition border-1 border-gray-300"
-        onClick={() => navigate("/chat")}
+        onClick={() => window.location.href = "http://localhost:8501"}
       >Continuar al Dash</button>
     </div>
   );
