@@ -15,9 +15,9 @@ Plataforma cripto con API (FastAPI), scrapers en tiempo real, análisis OLAP y p
 
 initializer steps
 1. pip install -r requirements.txt
-2. cd Front -> npm install -> npm run dev
-3. cd Back -> python run_server.py -> python -m streamlit run app.py
-4. python -m streamlit run /workspaces/E-trading/dashboard/app.py
+2. cd public/ -> npm install -> npm run dev
+3. cd src/ -> python run_server.py
+4. cd src/ -> python -m streamlit run app.py
 
 
 
