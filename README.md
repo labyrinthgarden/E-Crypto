@@ -21,12 +21,6 @@ initializer steps
 
 
 
-## Notas importantes
-
-- Para que la app funcione correctamente, deben tener datos en la base MongoDB.  
-- La API (`main.py`) y el dashboard (`dashboard/app.py`) dependen de que Mongo tenga datos, pero no dependen directamente de los scrapers.  
-- Los scrapers solo se usan para **llenar o actualizar la base de datos**; pueden ejecutarse periódicamente si se desea.  
-
 
 
  
