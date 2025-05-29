@@ -1,7 +1,7 @@
 # E-Crypto
 Plataforma cripto con API (FastAPI), scrapers en tiempo real, análisis OLAP y predicción de precios con LSTM, visualizado en Streamlit.
 <p align="center">
-  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/pics/cryptoLogo.png?raw=true" alt="E-CRYPTO" width="300"/>
+  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/assets/cryptoLogo.png?raw=true" alt="E-CRYPTO" width="300"/>
 </p>
 
 <p align="center">
