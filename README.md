@@ -4,13 +4,13 @@ Plataforma cripto con API (FastAPI), scrapers en tiempo real, análisis OLAP y p
   <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/assets/cryptoLogo.png?raw=true" alt="E-CRYPTO" width="300"/>
 </p>
 <p align="center">
-  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/pics/home.jpeg?raw=true" alt="E-CRYPTO" width="300"/>
+  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/assets/home.jpeg?raw=true" alt="E-CRYPTO" width="300"/>
 </p>
 <p align="center">
   <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/assets/chat.png?raw=true" alt="E-CRYPTO" width="300"/>
 </p>
 <p align="center">
-  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/pics/dash.png?raw=true" alt="E-CRYPTO" width="300"/>
+  <img src="https://github.com/Ochoa-David/E-Crypto/blob/main/assets/dash.png?raw=true" alt="E-CRYPTO" width="300"/>
 </p>
 
 ## Recomendación para el flujo de trabajo - Initializer steps
