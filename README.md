@@ -1,5 +1,6 @@
 # E-Crypto
 Plataforma cripto con API (FastAPI), scrapers en tiempo real, análisis OLAP y predicción de precios con LSTM, visualizado en Streamlit.
+
 ![Vista 1](assets/cryptoLogo.png)
 ![Vista 2](assets/home.jpeg)
 ![Vista 3](assets/chat.png)
